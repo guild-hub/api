@@ -7,9 +7,10 @@
 		"url": "https://github.com/guild-hub/api.git"
 	},
 	"scripts": {
-		"build": "bun build src/index.ts",
+		"build": "bun build src/index.ts --outdir dist --minify --target browser",
 		"dev": "wrangler dev src/index.ts",
-		"deploy": "wrangler deploy --minify src/index.ts",
+		"deploy": "wrangler deploy dist/index.js",
+		"publish": "bun run build && bun run deploy",
 		"lint": "biome lint src",
 		"format": "biome format --write .",
 		"prepare": "husky",
