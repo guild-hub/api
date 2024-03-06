@@ -5,9 +5,9 @@ import { prettyJSON } from 'hono/pretty-json'
 
 import v1 from '$/routes/v1'
 
-import { envParseNumber } from '$/lib/env'
+import type { Bindings } from '$/lib/types'
 
-const app = new Hono()
+const app = new Hono<Bindings>()
 
 app.use('*', cors())
 app.use('*', logger())
@@ -19,4 +19,4 @@ app.get('/', (c) => {
 
 app.route('/v1', v1)
 
-export default { port: envParseNumber('PORT'), fetch: app.fetch }
+export default { fetch: app.fetch }
