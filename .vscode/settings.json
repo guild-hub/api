@@ -33,5 +33,6 @@
 		"commitlint",
 		"neondatabase",
 		"paralleldrive"
-	]
+	],
+	"conventionalCommits.scopes": ["wrangler", "vscode"]
 }
