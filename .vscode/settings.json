@@ -1,0 +1,37 @@
+{
+	"todohighlight.keywords": [
+		{
+			"text": "TODO:",
+			"color": "white",
+			"backgroundColor": "blue"
+		},
+		{
+			"text": "FIXME:",
+			"color": "white",
+			"backgroundColor": "purple"
+		},
+		{
+			"text": "HACK:",
+			"color": "white",
+			"backgroundColor": "orange"
+		},
+		{
+			"text": "BUG:",
+			"color": "white",
+			"backgroundColor": "red"
+		},
+		{
+			"text": "NOTE:",
+			"color": "white",
+			"backgroundColor": "green"
+		}
+	],
+	"editor.defaultFormatter": "biomejs.biome",
+	"cSpell.words": [
+		"biomejs",
+		"cloudflare",
+		"commitlint",
+		"neondatabase",
+		"paralleldrive"
+	]
+}
