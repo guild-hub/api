@@ -1,18 +1,20 @@
 import { eq } from 'drizzle-orm'
 import { Hono } from 'hono'
 
-import { db } from '$/db/client'
 import { guilds } from '$/db/schema'
 import { ALLOWED_GUILDS_WITHES } from '$/lib/constants'
+import type { Bindings } from '$/lib/types'
 import { getAllowedQueries, getTableKeys, queryParseNumber } from '$/lib/utils'
+import { dbMiddleware } from '$/lib/vars'
 
-const app = new Hono()
+const app = new Hono<Bindings>()
 
-app.get('/', async (ctx) => {
-	const { limit, offset } = ctx.req.query()
+app.get('/', dbMiddleware, async (c) => {
+	const db = c.var.db(c)
+	const { limit, offset } = c.req.query()
 
-	const withes = ctx.req.queries('with')
-	const columns = ctx.req.queries('columns')
+	const withes = c.req.queries('with')
+	const columns = c.req.queries('columns')
 
 	const findLimit = queryParseNumber(limit)
 	const findOffset = queryParseNumber(offset)
@@ -26,14 +28,15 @@ app.get('/', async (ctx) => {
 		columns: findColumns,
 	})
 
-	return ctx.json({ data })
+	return c.json({ data })
 })
 
-app.get('/:id', async (ctx) => {
-	const id = ctx.req.param('id')
+app.get('/:id', dbMiddleware, async (c) => {
+	const db = c.var.db(c)
+	const id = c.req.param('id')
 	const bigintId = BigInt(id)
-	const withes = ctx.req.queries('with')
-	const columns = ctx.req.queries('columns')
+	const withes = c.req.queries('with')
+	const columns = c.req.queries('columns')
 
 	const findWith = getAllowedQueries(ALLOWED_GUILDS_WITHES, withes)
 	const findColumns = getAllowedQueries(getTableKeys(guilds), columns)
@@ -44,9 +47,9 @@ app.get('/:id', async (ctx) => {
 		columns: findColumns,
 	})
 
-	return ctx.json({ data })
+	return c.json({ data })
 })
 
-app.post('/', async (ctx) => {})
+app.post('/', async (c) => {})
 
 export default app

@@ -10,7 +10,7 @@ const envSchema = z.object({
 
 const env = envSchema.parse(process.env)
 
-type Env = z.infer<typeof envSchema>
+export type Env = z.infer<typeof envSchema>
 
 export function envParseNumber<T extends keyof Env>(variable: T): number {
 	return Number.parseInt(env[variable])
