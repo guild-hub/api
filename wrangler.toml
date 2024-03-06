@@ -1,8 +1,8 @@
-name = "myapp"
+name = "guildhub"
 compatibility_date = "2023-12-01"
 
-# [vars]
-# MY_VARIABLE = "production_value"
+[vars]
+DISCORD_GUILD_ID = "1120920798044106842"
 
 # [[kv_namespaces]]
 # binding = "MY_KV_NAMESPACE"
