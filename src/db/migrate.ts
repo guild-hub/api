@@ -1,10 +1,9 @@
 import '$/lib/env'
-import { neon } from '@neondatabase/serverless'
-import { drizzle } from 'drizzle-orm/neon-http'
-import { migrate } from 'drizzle-orm/neon-http/migrator'
+import { createClient } from '@libsql/client'
+import { drizzle } from 'drizzle-orm/libsql'
+import { migrate } from 'drizzle-orm/libsql/migrator'
 
-const sql = neon<boolean, boolean>(process.env.DATABASE_URL)
-
+const sql = createClient({ url: process.env.DATABASE_URL, authToken: process.env.DATABASE_AUTH_TOKEN })
 const db = drizzle(sql)
 
 try {

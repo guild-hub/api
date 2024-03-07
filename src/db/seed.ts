@@ -1,17 +1,25 @@
 import '$/lib/env'
-import { neon } from '@neondatabase/serverless'
-import { drizzle } from 'drizzle-orm/neon-http'
+import { drizzle } from 'drizzle-orm/libsql'
 
-import * as schema from '$/db/schema'
+import * as schemas from '$/db/schemas'
+import { createClient } from '@libsql/client'
 
-const sql = neon<boolean, boolean>(process.env.DATABASE_URL)
-
-const db = drizzle(sql, { schema })
+const sql = createClient({ url: process.env.DATABASE_URL, authToken: process.env.DATABASE_AUTH_TOKEN })
+const db = drizzle(sql, { schema: schemas })
 
 try {
 	console.log('Seeding database')
 
-	const promises = [db.delete(schema.guilds), db.delete(schema.seekers), db.delete(schema.requirements)]
+	const promises = [
+		db.delete(schemas.guilds),
+		db.delete(schemas.seekers),
+		db.delete(schemas.requirements),
+		db.delete(schemas.blacklists),
+		db.delete(schemas.embeds),
+		db.delete(schemas.templates),
+		db.delete(schemas.alliances),
+		db.delete(schemas.partnerships),
+	]
 
 	await Promise.all(promises)
 
