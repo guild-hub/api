@@ -17,6 +17,6 @@ app.get('/', (c) => {
 	return c.text('Hello Hono!')
 })
 
-app.route('/v1', v1)
+app.route('/api/v1', v1)
 
 export default { fetch: app.fetch }
