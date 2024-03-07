@@ -23,7 +23,7 @@
 			"enabled": true,
 			"quoteStyle": "single",
 			"indentWidth": 4,
-			"lineWidth": 120,
+			"lineWidth": 130,
 			"semicolons": "asNeeded"
 		}
 	}
