@@ -31,6 +31,13 @@
 		"sqlite",
 		"turso"
 	],
-	"conventionalCommits.scopes": ["wrangler", "vscode", "biome", "drizzle"],
+	"conventionalCommits.scopes": [
+		"wrangler",
+		"vscode",
+		"biome",
+		"drizzle",
+		"api",
+		"env"
+	],
 	"exportall.config.folderListener": ["/src/db/schemas"]
 }
