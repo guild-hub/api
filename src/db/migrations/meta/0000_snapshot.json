@@ -1,102 +1,121 @@
 {
-  "id": "eac064c6-b755-46c5-8564-b42ff2c708fc",
-  "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
-  "dialect": "pg",
+  "dialect": "sqlite",
+  "id": "7d9b074e-6e53-4ab1-8c71-2efa6a3acb44",
+  "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "alliance": {
       "name": "alliance",
-      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "uuid",
+          "type": "integer",
           "primaryKey": true,
           "notNull": true,
-          "default": "gen_random_uuid()"
+          "autoincrement": true
         },
-        "seeker_id": {
-          "name": "seeker_id",
-          "type": "bigint",
+        "sender_seeker_id": {
+          "name": "sender_seeker_id",
+          "type": "blob",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
-        "guild_id": {
-          "name": "guild_id",
-          "type": "bigint",
+        "receiver_seeker_id": {
+          "name": "receiver_seeker_id",
+          "type": "blob",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
+        },
+        "sender_guild_id": {
+          "name": "sender_guild_id",
+          "type": "blob",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "receiver_guild_id": {
+          "name": "receiver_guild_id",
+          "type": "blob",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
         },
         "status": {
           "name": "status",
-          "type": "smallint",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "here_mention": {
-          "name": "here_mention",
-          "type": "boolean",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false,
-          "default": false
-        },
-        "everyone_mention": {
-          "name": "everyone_mention",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": false
+          "autoincrement": false
         },
         "accepted_at": {
           "name": "accepted_at",
-          "type": "timestamp",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
-        "denial_reason": {
-          "name": "denial_reason",
-          "type": "varchar(255)",
+        "rejected_at": {
+          "name": "rejected_at",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
-        "denied_at": {
-          "name": "denied_at",
-          "type": "timestamp",
+        "rejected_reason": {
+          "name": "rejected_reason",
+          "type": "text(255)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "created_at": {
           "name": "created_at",
-          "type": "timestamp",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false,
-          "default": "now()"
+          "autoincrement": false
         },
         "updated_at": {
           "name": "updated_at",
-          "type": "timestamp",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false,
-          "default": "now()"
+          "autoincrement": false
         }
       },
       "indexes": {
-        "alliances_seeker_idx": {
-          "name": "alliances_seeker_idx",
+        "alliances_idx_sender_seeker": {
+          "name": "alliances_idx_sender_seeker",
           "columns": [
-            "seeker_id"
-          ],
-          "isUnique": true
-        },
-        "alliances_guild_idx": {
-          "name": "alliances_guild_idx",
-          "columns": [
-            "guild_id"
+            "sender_seeker_id"
           ],
           "isUnique": false
         },
-        "alliances_status_idx": {
-          "name": "alliances_status_idx",
+        "alliances_idx_receiver_seeker": {
+          "name": "alliances_idx_receiver_seeker",
+          "columns": [
+            "receiver_seeker_id"
+          ],
+          "isUnique": false
+        },
+        "alliances_idx_sender_guild": {
+          "name": "alliances_idx_sender_guild",
+          "columns": [
+            "sender_guild_id"
+          ],
+          "isUnique": false
+        },
+        "alliances_idx_receiver_guild": {
+          "name": "alliances_idx_receiver_guild",
+          "columns": [
+            "receiver_guild_id"
+          ],
+          "isUnique": false
+        },
+        "alliances_idx_status": {
+          "name": "alliances_idx_status",
           "columns": [
             "status"
           ],
@@ -104,30 +123,56 @@
         }
       },
       "foreignKeys": {
-        "alliance_seeker_id_seeker_id_fk": {
-          "name": "alliance_seeker_id_seeker_id_fk",
+        "alliance_sender_seeker_id_seekers_id_fk": {
+          "name": "alliance_sender_seeker_id_seekers_id_fk",
           "tableFrom": "alliance",
-          "tableTo": "seeker",
+          "tableTo": "seekers",
           "columnsFrom": [
-            "seeker_id"
+            "sender_seeker_id"
           ],
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "alliance_guild_id_guild_id_fk": {
-          "name": "alliance_guild_id_guild_id_fk",
+        "alliance_receiver_seeker_id_seekers_id_fk": {
+          "name": "alliance_receiver_seeker_id_seekers_id_fk",
+          "tableFrom": "alliance",
+          "tableTo": "seekers",
+          "columnsFrom": [
+            "receiver_seeker_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "alliance_sender_guild_id_guild_id_fk": {
+          "name": "alliance_sender_guild_id_guild_id_fk",
           "tableFrom": "alliance",
           "tableTo": "guild",
           "columnsFrom": [
-            "guild_id"
+            "sender_guild_id"
           ],
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "alliance_receiver_guild_id_guild_id_fk": {
+          "name": "alliance_receiver_guild_id_guild_id_fk",
+          "tableFrom": "alliance",
+          "tableTo": "guild",
+          "columnsFrom": [
+            "receiver_guild_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -136,70 +181,81 @@
     },
     "blacklist": {
       "name": "blacklist",
-      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "uuid",
+          "type": "text(36)",
           "primaryKey": true,
           "notNull": true,
-          "default": "gen_random_uuid()"
+          "autoincrement": false
         },
         "guild_id": {
           "name": "guild_id",
-          "type": "bigint",
+          "type": "blob",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         },
         "user_id": {
           "name": "user_id",
-          "type": "bigint",
+          "type": "blob",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         },
         "type": {
           "name": "type",
-          "type": "smallint",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         },
         "reason": {
           "name": "reason",
-          "type": "varchar(255)",
+          "type": "text(255)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "expiration_date": {
           "name": "expiration_date",
-          "type": "timestamp",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "created_at": {
           "name": "created_at",
-          "type": "timestamp",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false,
-          "default": "now()"
+          "autoincrement": false
         },
         "updated_at": {
           "name": "updated_at",
-          "type": "timestamp",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false,
-          "default": "now()"
+          "autoincrement": false
         }
       },
       "indexes": {
-        "blacklist_guild_idx": {
-          "name": "blacklist_guild_idx",
+        "blacklist_guild_id_unique": {
+          "name": "blacklist_guild_id_unique",
+          "columns": [
+            "guild_id"
+          ],
+          "isUnique": true
+        },
+        "blacklists_idx_guild_id": {
+          "name": "blacklists_idx_guild_id",
           "columns": [
             "guild_id"
           ],
           "isUnique": false
         },
-        "blacklist_user_idx": {
-          "name": "blacklist_user_idx",
+        "blacklists_idx_user_id": {
+          "name": "blacklists_idx_user_id",
           "columns": [
             "user_id"
           ],
@@ -208,73 +264,90 @@
       },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "blacklist_guild_id_unique": {
-          "name": "blacklist_guild_id_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "guild_id"
-          ]
-        }
-      }
+      "uniqueConstraints": {}
     },
     "embed_field": {
       "name": "embed_field",
-      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "varchar(8)",
+          "type": "text(8)",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         },
         "embed_id": {
           "name": "embed_id",
-          "type": "uuid",
+          "type": "text(36)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "name": {
           "name": "name",
-          "type": "varchar(256)",
+          "type": "text(256)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         },
         "value": {
           "name": "value",
-          "type": "varchar(1024)",
+          "type": "text(1024)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         },
         "inline": {
           "name": "inline",
-          "type": "boolean",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false,
+          "autoincrement": false,
           "default": false
         },
         "created_at": {
           "name": "created_at",
-          "type": "timestamp",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false,
-          "default": "now()"
+          "autoincrement": false
         },
         "updated_at": {
           "name": "updated_at",
-          "type": "timestamp",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false,
-          "default": "now()"
+          "autoincrement": false
         }
       },
       "indexes": {
-        "embed_idx": {
-          "name": "embed_idx",
+        "embeds_fields_idx_embed_id": {
+          "name": "embeds_fields_idx_embed_id",
           "columns": [
             "embed_id"
           ],
-          "isUnique": true
+          "isUnique": false
+        },
+        "embeds_fields_idx_name": {
+          "name": "embeds_fields_idx_name",
+          "columns": [
+            "name"
+          ],
+          "isUnique": false
+        },
+        "embeds_fields_idx_value": {
+          "name": "embeds_fields_idx_value",
+          "columns": [
+            "value"
+          ],
+          "isUnique": false
+        },
+        "embeds_fields_idx_inline": {
+          "name": "embeds_fields_idx_inline",
+          "columns": [
+            "inline"
+          ],
+          "isUnique": false
         }
       },
       "foreignKeys": {
@@ -288,7 +361,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -297,231 +370,262 @@
     },
     "embed": {
       "name": "embed",
-      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "uuid",
+          "type": "text(36)",
           "primaryKey": true,
           "notNull": true,
-          "default": "gen_random_uuid()"
+          "autoincrement": false
         },
-        "template_id": {
-          "name": "template_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "is_active": {
-          "name": "is_active",
-          "type": "boolean",
+        "guild_id": {
+          "name": "guild_id",
+          "type": "blob",
           "primaryKey": false,
           "notNull": false,
+          "autoincrement": false
+        },
+        "active": {
+          "name": "active",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
           "default": false
         },
         "name": {
           "name": "name",
-          "type": "varchar(25)",
+          "type": "text(25)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         },
         "author_name": {
           "name": "author_name",
-          "type": "varchar(256)",
+          "type": "text(256)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "author_icon_url": {
           "name": "author_icon_url",
-          "type": "varchar(2048)",
+          "type": "text(2048)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "title": {
           "name": "title",
-          "type": "varchar(256)",
+          "type": "text(256)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "description": {
           "name": "description",
-          "type": "varchar(4096)",
+          "type": "text(4096)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "hex_color": {
           "name": "hex_color",
-          "type": "varchar(7)",
+          "type": "text(7)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "image_url": {
           "name": "image_url",
-          "type": "varchar(2048)",
+          "type": "text(2048)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "thumbnail_url": {
           "name": "thumbnail_url",
-          "type": "varchar(2048)",
+          "type": "text(2048)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "footer_text": {
           "name": "footer_text",
-          "type": "varchar(2048)",
+          "type": "text(2048)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "footer_icon_url": {
           "name": "footer_icon_url",
-          "type": "varchar(2048)",
+          "type": "text(2048)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "footer_timestamp": {
           "name": "footer_timestamp",
-          "type": "boolean",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "created_at": {
           "name": "created_at",
-          "type": "timestamp",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false,
-          "default": "now()"
+          "autoincrement": false
         },
         "updated_at": {
           "name": "updated_at",
-          "type": "timestamp",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false,
-          "default": "now()"
+          "autoincrement": false
         }
       },
       "indexes": {
-        "template_id_name_idx": {
-          "name": "template_id_name_idx",
+        "embeds_idx_guild_id_name": {
+          "name": "embeds_idx_guild_id_name",
           "columns": [
-            "template_id",
+            "guild_id",
             "name"
           ],
           "isUnique": true
         },
-        "is_active_idx": {
-          "name": "is_active_idx",
-          "columns": [
-            "is_active"
-          ],
-          "isUnique": false
-        }
-      },
-      "foreignKeys": {
-        "embed_template_id_template_id_fk": {
-          "name": "embed_template_id_template_id_fk",
-          "tableFrom": "embed",
-          "tableTo": "template",
-          "columnsFrom": [
-            "template_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "embed_name_unique": {
-          "name": "embed_name_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
-        }
-      }
-    },
-    "guild_blacklist": {
-      "name": "guild_blacklist",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "guild_id": {
-          "name": "guild_id",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "blacklisted_guild_id": {
-          "name": "blacklisted_guild_id",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "type": {
-          "name": "type",
-          "type": "smallint",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "reason": {
-          "name": "reason",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "expiration_date": {
-          "name": "expiration_date",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
-        }
-      },
-      "indexes": {
-        "guild_blacklist_guild_idx": {
-          "name": "guild_blacklist_guild_idx",
+        "embeds_idx_guild_id": {
+          "name": "embeds_idx_guild_id",
           "columns": [
             "guild_id"
           ],
           "isUnique": false
         },
-        "guild_blacklist_user_idx": {
-          "name": "guild_blacklist_user_idx",
+        "embeds_idx_name": {
+          "name": "embeds_idx_name",
+          "columns": [
+            "name"
+          ],
+          "isUnique": false
+        },
+        "embeds_idx_active": {
+          "name": "embeds_idx_active",
+          "columns": [
+            "active"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "embed_guild_id_guild_id_fk": {
+          "name": "embed_guild_id_guild_id_fk",
+          "tableFrom": "embed",
+          "tableTo": "guild",
+          "columnsFrom": [
+            "guild_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "guild_blacklist": {
+      "name": "guild_blacklist",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text(36)",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "guild_id": {
+          "name": "guild_id",
+          "type": "blob",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "blob",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "blacklisted_guild_id": {
+          "name": "blacklisted_guild_id",
+          "type": "blob",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "type": {
+          "name": "type",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "reason": {
+          "name": "reason",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "expiration_date": {
+          "name": "expiration_date",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "guild_blacklists_idx_guild_id_blacklisted_guild_id": {
+          "name": "guild_blacklists_idx_guild_id_blacklisted_guild_id",
+          "columns": [
+            "guild_id",
+            "blacklisted_guild_id"
+          ],
+          "isUnique": true
+        },
+        "guild_blacklists_idx_guild_id": {
+          "name": "guild_blacklists_idx_guild_id",
+          "columns": [
+            "guild_id"
+          ],
+          "isUnique": false
+        },
+        "guild_blacklists_idx_user_id": {
+          "name": "guild_blacklists_idx_user_id",
           "columns": [
             "user_id"
           ],
           "isUnique": false
         },
-        "blacklisted_guild_idx": {
-          "name": "blacklisted_guild_idx",
+        "guild_blacklists_idx_blacklisted_guild_id": {
+          "name": "guild_blacklists_idx_blacklisted_guild_id",
           "columns": [
             "blacklisted_guild_id"
           ],
@@ -539,67 +643,56 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "guild_blacklist_blacklisted_guild_id_unique": {
-          "name": "guild_blacklist_blacklisted_guild_id_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "blacklisted_guild_id"
-          ]
-        }
-      }
+      "uniqueConstraints": {}
     },
     "guild_seekers": {
       "name": "guild_seekers",
-      "schema": "",
       "columns": {
-        "seeker_id": {
-          "name": "seeker_id",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": false
-        },
         "guild_id": {
           "name": "guild_id",
-          "type": "bigint",
+          "type": "blob",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "blob",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
         },
         "created_at": {
           "name": "created_at",
-          "type": "timestamp",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false,
-          "default": "now()"
+          "autoincrement": false
         },
         "updated_at": {
           "name": "updated_at",
-          "type": "timestamp",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false,
-          "default": "now()"
+          "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "guild_seekers_idx_guild_id_seeker_id": {
+          "name": "guild_seekers_idx_guild_id_seeker_id",
+          "columns": [
+            "user_id",
+            "guild_id"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {
-        "guild_seekers_seeker_id_seeker_id_fk": {
-          "name": "guild_seekers_seeker_id_seeker_id_fk",
-          "tableFrom": "guild_seekers",
-          "tableTo": "seeker",
-          "columnsFrom": [
-            "seeker_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
         "guild_seekers_guild_id_guild_id_fk": {
           "name": "guild_seekers_guild_id_guild_id_fk",
           "tableFrom": "guild_seekers",
@@ -610,77 +703,105 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "guild_seekers_user_id_seekers_id_fk": {
+          "name": "guild_seekers_user_id_seekers_id_fk",
+          "tableFrom": "guild_seekers",
+          "tableTo": "seekers",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {
-        "guild_seekers_seeker_id_guild_id_pk": {
-          "name": "guild_seekers_seeker_id_guild_id_pk",
-          "columns": [
-            "seeker_id",
-            "guild_id"
-          ]
-        }
-      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
     "guild": {
       "name": "guild",
-      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "bigint",
+          "type": "blob",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         },
         "alliances_channel_id": {
           "name": "alliances_channel_id",
-          "type": "bigint",
+          "type": "blob",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
+        },
+        "partnerships_channel_id": {
+          "name": "partnerships_channel_id",
+          "type": "blob",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
         },
         "subscription_plan": {
           "name": "subscription_plan",
-          "type": "smallint",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false,
-          "default": 0
+          "autoincrement": false
         },
         "subscription_start_date": {
           "name": "subscription_start_date",
-          "type": "timestamp",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false,
-          "default": "now()"
+          "autoincrement": false
         },
         "subscription_end_date": {
           "name": "subscription_end_date",
-          "type": "timestamp",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "created_at": {
           "name": "created_at",
-          "type": "timestamp",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false,
-          "default": "now()"
+          "autoincrement": false
         },
         "updated_at": {
           "name": "updated_at",
-          "type": "timestamp",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false,
-          "default": "now()"
+          "autoincrement": false
         }
       },
       "indexes": {
-        "subscription_plan_idx": {
-          "name": "subscription_plan_idx",
+        "guilds_idx_subscription_plan": {
+          "name": "guilds_idx_subscription_plan",
           "columns": [
             "subscription_plan"
+          ],
+          "isUnique": false
+        },
+        "guilds_idx_alliances_channel_id": {
+          "name": "guilds_idx_alliances_channel_id",
+          "columns": [
+            "alliances_channel_id"
+          ],
+          "isUnique": false
+        },
+        "guilds_idx_partnerships_channel_id": {
+          "name": "guilds_idx_partnerships_channel_id",
+          "columns": [
+            "partnerships_channel_id"
           ],
           "isUnique": false
         }
@@ -691,103 +812,123 @@
     },
     "partnership": {
       "name": "partnership",
-      "schema": "",
       "columns": {
         "id": {
           "name": "id",
-          "type": "uuid",
+          "type": "text(8)",
           "primaryKey": true,
           "notNull": true,
-          "default": "gen_random_uuid()"
+          "autoincrement": false
         },
-        "seeker_id": {
-          "name": "seeker_id",
-          "type": "bigint",
+        "sender_seeker_id": {
+          "name": "sender_seeker_id",
+          "type": "blob",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
-        "guild_id": {
-          "name": "guild_id",
-          "type": "bigint",
+        "receiver_seeker_id": {
+          "name": "receiver_seeker_id",
+          "type": "blob",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
+        },
+        "sender_guild_id": {
+          "name": "sender_guild_id",
+          "type": "blob",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "receiver_guild_id": {
+          "name": "receiver_guild_id",
+          "type": "blob",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
         },
         "status": {
           "name": "status",
-          "type": "smallint",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "here_mention": {
-          "name": "here_mention",
-          "type": "boolean",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false,
-          "default": false
+          "autoincrement": false
         },
-        "everyone_mention": {
-          "name": "everyone_mention",
-          "type": "boolean",
+        "expiration_date": {
+          "name": "expiration_date",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false,
-          "default": false
-        },
-        "end_date": {
-          "name": "end_date",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
+          "autoincrement": false
         },
         "accepted_at": {
           "name": "accepted_at",
-          "type": "timestamp",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
-        "denial_reason": {
-          "name": "denial_reason",
-          "type": "varchar(255)",
+        "rejected_at": {
+          "name": "rejected_at",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
-        "denied_at": {
-          "name": "denied_at",
-          "type": "timestamp",
+        "rejected_reason": {
+          "name": "rejected_reason",
+          "type": "text(255)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "created_at": {
           "name": "created_at",
-          "type": "timestamp",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false,
-          "default": "now()"
+          "autoincrement": false
         },
         "updated_at": {
           "name": "updated_at",
-          "type": "timestamp",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false,
-          "default": "now()"
+          "autoincrement": false
         }
       },
       "indexes": {
-        "partnerships_seeker_idx": {
-          "name": "partnerships_seeker_idx",
+        "partnerships_idx_sender_seeker": {
+          "name": "partnerships_idx_sender_seeker",
           "columns": [
-            "seeker_id"
-          ],
-          "isUnique": true
-        },
-        "partnerships_guild_idx": {
-          "name": "partnerships_guild_idx",
-          "columns": [
-            "guild_id"
+            "sender_seeker_id"
           ],
           "isUnique": false
         },
-        "partnerships_status_idx": {
-          "name": "partnerships_status_idx",
+        "partnerships_idx_receiver_seeker": {
+          "name": "partnerships_idx_receiver_seeker",
+          "columns": [
+            "receiver_seeker_id"
+          ],
+          "isUnique": false
+        },
+        "partnerships_idx_sender_guild": {
+          "name": "partnerships_idx_sender_guild",
+          "columns": [
+            "sender_guild_id"
+          ],
+          "isUnique": false
+        },
+        "partnerships_idx_receiver_guild": {
+          "name": "partnerships_idx_receiver_guild",
+          "columns": [
+            "receiver_guild_id"
+          ],
+          "isUnique": false
+        },
+        "partnerships_idx_status": {
+          "name": "partnerships_idx_status",
           "columns": [
             "status"
           ],
@@ -795,156 +936,246 @@
         }
       },
       "foreignKeys": {
-        "partnership_seeker_id_seeker_id_fk": {
-          "name": "partnership_seeker_id_seeker_id_fk",
+        "partnership_sender_seeker_id_seekers_id_fk": {
+          "name": "partnership_sender_seeker_id_seekers_id_fk",
           "tableFrom": "partnership",
-          "tableTo": "seeker",
+          "tableTo": "seekers",
           "columnsFrom": [
-            "seeker_id"
+            "sender_seeker_id"
           ],
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "partnership_guild_id_guild_id_fk": {
-          "name": "partnership_guild_id_guild_id_fk",
+        "partnership_receiver_seeker_id_seekers_id_fk": {
+          "name": "partnership_receiver_seeker_id_seekers_id_fk",
+          "tableFrom": "partnership",
+          "tableTo": "seekers",
+          "columnsFrom": [
+            "receiver_seeker_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "partnership_sender_guild_id_guild_id_fk": {
+          "name": "partnership_sender_guild_id_guild_id_fk",
           "tableFrom": "partnership",
           "tableTo": "guild",
           "columnsFrom": [
-            "guild_id"
+            "sender_guild_id"
           ],
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "partnership_receiver_guild_id_guild_id_fk": {
+          "name": "partnership_receiver_guild_id_guild_id_fk",
+          "tableFrom": "partnership",
+          "tableTo": "guild",
+          "columnsFrom": [
+            "receiver_guild_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "requirement": {
-      "name": "requirement",
-      "schema": "",
+    "requirements": {
+      "name": "requirements",
       "columns": {
         "id": {
           "name": "id",
-          "type": "uuid",
+          "type": "text(36)",
           "primaryKey": true,
           "notNull": true,
-          "default": "gen_random_uuid()"
+          "autoincrement": false
         },
         "guild_id": {
           "name": "guild_id",
-          "type": "bigint",
+          "type": "blob",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "verified": {
           "name": "verified",
-          "type": "boolean",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "partnered": {
           "name": "partnered",
-          "type": "boolean",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "minimum_age": {
           "name": "minimum_age",
-          "type": "smallint",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "minimum_boosts": {
           "name": "minimum_boosts",
-          "type": "smallint",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "minimum_members": {
           "name": "minimum_members",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "creation_date": {
           "name": "creation_date",
-          "type": "timestamp",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "mfa_level": {
           "name": "mfa_level",
-          "type": "smallint",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "nsfw_content_level": {
           "name": "nsfw_content_level",
-          "type": "smallint",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "verification_level": {
           "name": "verification_level",
-          "type": "smallint",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": false
-        },
-        "locales": {
-          "name": "locales",
-          "type": "varchar(8)[]",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "excluded_locales": {
-          "name": "excluded_locales",
-          "type": "varchar(8)[]",
-          "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "explicit_content_level": {
           "name": "explicit_content_level",
-          "type": "smallint",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
         "created_at": {
           "name": "created_at",
-          "type": "timestamp",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false,
-          "default": "now()"
+          "autoincrement": false
         },
         "updated_at": {
           "name": "updated_at",
-          "type": "timestamp",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false,
-          "default": "now()"
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "requirements_guild_id_guild_id_fk": {
+          "name": "requirements_guild_id_guild_id_fk",
+          "tableFrom": "requirements",
+          "tableTo": "guild",
+          "columnsFrom": [
+            "guild_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "requirements_locale": {
+      "name": "requirements_locale",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "requirements_id": {
+          "name": "requirements_id",
+          "type": "text(36)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "locale": {
+          "name": "locale",
+          "type": "text(8)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "excluded": {
+          "name": "excluded",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
         }
       },
       "indexes": {
-        "requirements_guild_idx": {
-          "name": "requirements_guild_idx",
+        "requirements_locales_idx_requirements_id_locale": {
+          "name": "requirements_locales_idx_requirements_id_locale",
           "columns": [
-            "guild_id"
+            "requirements_id",
+            "locale"
+          ],
+          "isUnique": true
+        },
+        "requirements_locales_idx_locale": {
+          "name": "requirements_locales_idx_locale",
+          "columns": [
+            "locale"
+          ],
+          "isUnique": false
+        },
+        "requirements_locales_idx_excluded": {
+          "name": "requirements_locales_idx_excluded",
+          "columns": [
+            "excluded"
           ],
           "isUnique": false
         }
       },
       "foreignKeys": {
-        "requirement_guild_id_guild_id_fk": {
-          "name": "requirement_guild_id_guild_id_fk",
-          "tableFrom": "requirement",
-          "tableTo": "guild",
+        "requirements_locale_requirements_id_requirements_id_fk": {
+          "name": "requirements_locale_requirements_id_requirements_id_fk",
+          "tableFrom": "requirements_locale",
+          "tableTo": "requirements",
           "columnsFrom": [
-            "guild_id"
+            "requirements_id"
           ],
           "columnsTo": [
             "id"
@@ -956,36 +1187,37 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "seeker": {
-      "name": "seeker",
-      "schema": "",
+    "seekers": {
+      "name": "seekers",
       "columns": {
         "id": {
           "name": "id",
-          "type": "bigint",
+          "type": "blob",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "autoincrement": false
         },
         "verified": {
           "name": "verified",
-          "type": "boolean",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false,
+          "autoincrement": false,
           "default": false
         },
         "created_at": {
           "name": "created_at",
-          "type": "timestamp",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false,
-          "default": "now()"
+          "autoincrement": false
         },
         "updated_at": {
           "name": "updated_at",
-          "type": "timestamp",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false,
-          "default": "now()"
+          "autoincrement": false
         }
       },
       "indexes": {},
@@ -993,58 +1225,155 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "template": {
-      "name": "template",
-      "schema": "",
+    "template_mention": {
+      "name": "template_mention",
       "columns": {
         "id": {
           "name": "id",
-          "type": "uuid",
+          "type": "integer",
           "primaryKey": true,
           "notNull": true,
-          "default": "gen_random_uuid()"
+          "autoincrement": true
         },
-        "guild_id": {
-          "name": "guild_id",
-          "type": "bigint",
+        "template_id": {
+          "name": "template_id",
+          "type": "text(36)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "autoincrement": false
         },
-        "name": {
-          "name": "name",
-          "type": "varchar(25)",
+        "role_id": {
+          "name": "role_id",
+          "type": "blob",
           "primaryKey": false,
-          "notNull": true
-        },
-        "role_mentions_ids": {
-          "name": "role_mentions_ids",
-          "type": "bigint[]",
-          "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "autoincrement": false
         },
         "created_at": {
           "name": "created_at",
-          "type": "timestamp",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false,
-          "default": "now()"
+          "autoincrement": false
         },
         "updated_at": {
           "name": "updated_at",
-          "type": "timestamp",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false,
-          "default": "now()"
+          "autoincrement": false
         }
       },
       "indexes": {
-        "guild_id_name_idx": {
-          "name": "guild_id_name_idx",
+        "template_mentions_idx_template_id_role_id": {
+          "name": "template_mentions_idx_template_id_role_id",
+          "columns": [
+            "template_id",
+            "role_id"
+          ],
+          "isUnique": true
+        },
+        "template_mentions_idx_role_id": {
+          "name": "template_mentions_idx_role_id",
+          "columns": [
+            "role_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "template_mention_template_id_template_id_fk": {
+          "name": "template_mention_template_id_template_id_fk",
+          "tableFrom": "template_mention",
+          "tableTo": "template",
+          "columnsFrom": [
+            "template_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "template": {
+      "name": "template",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text(36)",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "guild_id": {
+          "name": "guild_id",
+          "type": "blob",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "active_embed_id": {
+          "name": "active_embed_id",
+          "type": "text(36)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text(25)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "templates_idx_guild_id_name": {
+          "name": "templates_idx_guild_id_name",
           "columns": [
             "guild_id",
             "name"
           ],
           "isUnique": true
+        },
+        "templates_idx_guild_id": {
+          "name": "templates_idx_guild_id",
+          "columns": [
+            "guild_id"
+          ],
+          "isUnique": false
+        },
+        "templates_idx_name": {
+          "name": "templates_idx_name",
+          "columns": [
+            "name"
+          ],
+          "isUnique": false
+        },
+        "templates_idx_active_embed_id": {
+          "name": "templates_idx_active_embed_id",
+          "columns": [
+            "active_embed_id"
+          ],
+          "isUnique": false
         }
       },
       "foreignKeys": {
@@ -1058,27 +1387,18 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "template_name_unique": {
-          "name": "template_name_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
-        }
-      }
+      "uniqueConstraints": {}
     }
   },
   "enums": {},
-  "schemas": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
+    "tables": {},
+    "columns": {}
   }
 }
